@@ -7,7 +7,7 @@
 <script>
 export default {
   methods: {
-    logout() {
+    logout () {
       window.sessionStorage.removeItem('token')
       this.$router.push('/login')
     }
