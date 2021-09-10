@@ -18,7 +18,11 @@
           active-text-color="#409eff"
           unique-opened
           :collapse="isCollapse"
-          :collapse-transition="false">
+          :collapse-transition="false"
+          router
+          :default-active="activePath">
+          <!-- router=true 开启路由跳转，跳转值为index -->
+          <!-- default-active 菜单高亮 -->
           <!-- 一级菜单 -->
           <el-submenu :index="item.id + ''" v-for="item in menuList" :key="item.id">
             <template slot="title">
@@ -29,7 +33,8 @@
             </template>
 
             <!-- 二级菜单 -->
-            <el-menu-item :index="subItem.id + ''" v-for="subItem in item.children" :key="subItem.id">
+            <el-menu-item :index="'/'+subItem.path" v-for="subItem in item.children" :key="subItem.id"
+              @click="saveNavState('/'+subItem.path)">
               <!-- 图标 -->
               <i class="el-icon-menu"></i>
               <!-- 文本 -->
@@ -66,7 +71,10 @@
         </el-menu>
       </el-aside>
       <!-- 右主体 -->
-      <el-main>Main</el-main>
+      <el-main>
+        main
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -84,15 +92,19 @@ export default {
         102: 'iconfont icon-danju',
         145: 'iconfont icon-baobiao'
       },
-      isCollapse: false
+      // 是否折叠
+      isCollapse: false,
+      // 被激活的链接地址
+      activePath: ''
     }
   },
   created() {
     this.getMenuList()
+    this.activePath = window.sessionStorage.getItem('activePath')
   },
   methods: {
     logout() {
-      window.sessionStorage.removeItem('token')
+      window.sessionStorage.clear()
       this.$router.push('/login')
     },
     // 获取请求菜单
@@ -106,6 +118,10 @@ export default {
     },
     toggleCollapse() {
       this.isCollapse = !this.isCollapse
+    },
+    saveNavState(activePath) {
+      window.sessionStorage.setItem('activePath', activePath)
+      this.activePath = activePath
     }
   }
 }
