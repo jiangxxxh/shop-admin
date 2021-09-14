@@ -72,7 +72,6 @@
       </el-aside>
       <!-- 右主体 -->
       <el-main>
-        main
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -114,7 +113,7 @@ export default {
         return this.$message.error(res.meta.msg)
       }
       this.menuList = res.data
-      console.log(res)
+      // console.log(res)
     },
     toggleCollapse() {
       this.isCollapse = !this.isCollapse
